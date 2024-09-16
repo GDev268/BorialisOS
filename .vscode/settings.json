@@ -4,7 +4,10 @@
         "*.embeddedhtml": "html",
         "random": "cpp",
         "compare": "cpp",
-        "cstdint": "cpp"
+        "cstdint": "cpp",
+        "format": "cpp",
+        "memory": "cpp",
+        "cstring": "cpp"
     },
     "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\g++.exe"
 }

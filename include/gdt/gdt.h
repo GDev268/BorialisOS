@@ -3,6 +3,7 @@
 
 #define GDT_ENTRIES 8
 
+#include <utils/types.h>
 #include <gdt/tss.h>
 
 struct GDTEntry {
@@ -26,13 +27,13 @@ public:
 
     uint16_t limit;
     GDTEntry offset[GDT_ENTRIES];
-}
+};
 
-static TSS tss;
+//static TSS tss;
 
-extern "C" __gdt_flush(uint64_t gdt);
+/* extern "C" __gdt_flush(uint64_t gdt);
 extern "C" __tss_flush(uint64_t tss);
 
-void initialize_gdt();
+void initialize_gdt();*/
 
 #endif

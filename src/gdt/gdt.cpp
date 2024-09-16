@@ -1,6 +1,5 @@
-#include <gdt/gdt.h>
-#include "gdt.h"
-#include <memory>
+#include "gdt/gdt.h"
+#include "utils/memory.h"
 
 //Explanation of each field in the Global Descriptor Table (GDT):
 //  Gate: Number of the gate in the table
@@ -15,8 +14,8 @@ void GDTR::create_descriptor(uint8_t gate, uint64_t base, uint32_t limit, uint8_
     offset[gate].base2 = (base >> 24) & 0xFF;       //Highest 8 bits of the base
     
     offset[gate].limit0 = (limit & 0xFFFF);         //Lowest 8 bits of the limit 
-    offset[gate].limit1 = (limit >> 16) & 0x0F;     //Middle 8 bits of the limit
-    offset[gate].limit1 |= granularity & 0xF0;      //Highest 4 bits of the granularity/flag    
+    offset[gate].limit2 = (limit >> 16) & 0x0F;     //Middle 8 bits of the limit
+    offset[gate].limit2 |= granularity & 0xF0;      //Highest 4 bits of the granularity/flag    
     
     offset[gate].access = access;
 }

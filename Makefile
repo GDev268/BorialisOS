@@ -1,29 +1,55 @@
 #!/usr/bin/make -f
 
+# Compiler and flags
+CC = i686-elf-g++
+CFLAGS = -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -Iinclude
+LDFLAGS = -ffreestanding -nostdlib
+AS = i686-elf-as
+ASFLAGS = 
+LD = i686-elf-gcc
+LD_FLAGS = -T linker.ld -lgcc
+
+# Directories
+SRC_DIR = src
+BUILD_DIR = build
+ISO_DIR = $(BUILD_DIR)/isodir
+GRUB_DIR = $(ISO_DIR)/boot/grub
+
+# Source files and object files
+SRCS = $(SRC_DIR)/kernel.cpp $(SRC_DIR)/gdt/gdt.cpp $(SRC_DIR)/video/vga.cpp 
+OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
+
+# Final output
+BIN = $(BUILD_DIR)/borialis.elf
+ISO = $(BUILD_DIR)/borialis.iso
+
 # Default target
-all: build
+all: $(BIN)
 
 # Build target
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# @cmake --preset build && cd build && make && MyExecutable.exe
-build:
-	i686-elf-as config/boot.s -o build/boot.o
-	i686-elf-g++ -c src/kernel.cpp -o build/kernel.o -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti
-	i686-elf-gcc -T linker.ld -o build/borialis.bin -ffreestanding -O2 -nostdlib build/boot.o build/kernel.o -lgcc
+$(BUILD_DIR)/boot.o: config/boot.s
+	$(AS) $< -o $@
 
-join:
-	@mkdir -p build/isodir/boot/grub
-	@cp build/borialis.bin build/isodir/boot/borialis.bin
-	@cp config/grub.cfg build/isodir/boot/grub/grub.cfg
-	@grub-mkrescue -o build/borialis.iso build/isodir
+$(BIN): $(BUILD_DIR)/boot.o $(OBJS)
+	$(LD) $(LD_FLAGS) -o $@ -ffreestanding -O2 -nostdlib $(BUILD_DIR)/boot.o $(OBJS)
+
+# Join target
+join: $(BIN)
+	@mkdir -p $(GRUB_DIR)
+	@cp $(BIN) $(ISO_DIR)/boot/borialis.bin
+	@cp config/grub.cfg $(GRUB_DIR)/grub.cfg
+	@grub-mkrescue -o $(ISO) $(ISO_DIR)
 
 # Clean target
 clean:
-	@rmdir build
+	@rm -rf $(BUILD_DIR)
 	@echo "Build directory cleaned"
 
 # Install target
-install: build
+install: $(ISO)
 	@cd build && make install
 
-.PHONY: all build clean install
+.PHONY: all clean install join
