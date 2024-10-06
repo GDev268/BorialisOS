@@ -1,13 +1,11 @@
 {
-    "C_Cpp.errorSquiggles": "disabled",
     "files.associations": {
         "*.embeddedhtml": "html",
-        "random": "cpp",
-        "compare": "cpp",
-        "cstdint": "cpp",
-        "format": "cpp",
-        "memory": "cpp",
-        "cstring": "cpp"
-    },
-    "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\g++.exe"
+        "gdt.h": "c",
+        "shell.h": "c",
+        "tss.h": "c",
+        "*.tcc": "c",
+        "ostream": "c",
+        "memory.h": "c"
+    }
 }
