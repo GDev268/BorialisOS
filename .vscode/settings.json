@@ -6,6 +6,7 @@
         "tss.h": "c",
         "*.tcc": "c",
         "ostream": "c",
-        "memory.h": "c"
+        "memory.h": "c",
+        "cstdint": "cpp"
     }
 }
