@@ -13,4 +13,12 @@ typedef unsigned long long int uint64_t;
 
 typedef uint64_t size_t;
 
+#if defined(__x86_64__) || defined(_M_X64)  // 64-bit architecture
+typedef uint64_t uintptr_t;
+#elif defined(__i386__) || defined(_M_IX86) // 32-bit architecture
+typedef uint32_t uintptr_t;
+#else
+#error "Unsupported architecture"
+#endif
+
 #endif
